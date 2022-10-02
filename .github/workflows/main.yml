@@ -45,7 +45,7 @@ jobs:
           with:
             push: true
             context: backend/
-            tags: lizvasilieva2016/foodgram-project-react:latest
+            tags: solomen88/foodgram-project-react:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           stack_file_name: docker-compose.yaml
           script: |
-            sudo docker pull lizvasilieva2016/foodgram-project-react
+            sudo docker pull solomen88/foodgram-project-react
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo rm .env
