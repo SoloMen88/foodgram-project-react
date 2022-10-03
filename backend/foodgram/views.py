@@ -52,14 +52,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     @action(
-        methods=['get', 'delete'],
+        methods=['post', 'delete'],
         detail=True,
         permission_classes=(permissions.IsAuthenticated, )
     )
     def favorite(self, request, pk=None):
         user = request.user
         recipe = get_object_or_404(Recipe, pk=pk)
-        if request.method == 'GET':
+        if request.method == 'POST':
             if Favorite.objects.filter(user=user, recipe=recipe).exists():
                 data = {
                     'errors': 'Рецепт уже в Избранном, загляни'
@@ -78,14 +78,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
-        methods=['get', 'delete'],
+        methods=['post', 'delete'],
         detail=True,
         permission_classes=(permissions.IsAuthenticated, )
     )
     def shopping_cart(self, request, pk=None):
         user = request.user
         recipe = get_object_or_404(Recipe, pk=pk)
-        if request.method == 'GET':
+        if request.method == 'POST':
             if ShoppingCart.objects.filter(user=user, recipe=recipe).exists():
                 data = {
                     'errors': 'Этот рецепт уже есть в списке покупок'
