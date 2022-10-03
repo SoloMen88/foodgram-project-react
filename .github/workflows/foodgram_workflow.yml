@@ -46,12 +46,6 @@ jobs:
             push: true
             context: backend/
             tags: solomen88/foodgram-project-react:latest
-        - name: Push to Docker Hub frontend
-          uses: docker/build-push-action@v2
-          with:
-            push: true
-            context: frontend/
-            tags: solomen88/foodgram-project-react-frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -83,7 +77,6 @@ jobs:
             sudo docker-compose up -d
             sudo docker-compose exec -T backend python manage.py collectstatic --no-input
   
-
   send_message:
     runs-on: ubuntu-latest
     needs: deploy
@@ -93,4 +86,4 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: ${{ github.workflow }}
+        message: ${{ github.workflow }} успешно выполнен! 
