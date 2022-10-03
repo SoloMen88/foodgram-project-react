@@ -46,6 +46,12 @@ jobs:
             push: true
             context: backend/
             tags: solomen88/foodgram-project-react:latest
+        - name: Push to Docker Hub frontend
+          uses: docker/build-push-action@v2
+          with:
+            push: true
+            context: frontend/
+            tags: solomen88/foodgram-project-react-frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
