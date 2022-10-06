@@ -14,7 +14,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientInRecipeSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='ingredient.pk')
+    id = serializers.IntegerField()
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
@@ -44,10 +44,6 @@ class RecipeListSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
-
-    def get_ingredients(self, obj):
-        ingredients = IngredientInRecipe.objects.filter(recipe=obj)
-        return IngredientInRecipeSerializer(ingredients, many=True).data
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
@@ -95,7 +91,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             if int(ingredient.get('amount')) <= 0:
                 raise serializers.ValidationError(
                     'Количество ингредиента должно быть больше нуля!')
-            ingredients_id_list.append(ingredient['id'])
+            ingredients_id_list.append(ingredient.get('id'))
         unique_ingredients = set(ingredients_id_list)
         if len(ingredients_id_list) > len(unique_ingredients):
             raise serializers.ValidationError(
