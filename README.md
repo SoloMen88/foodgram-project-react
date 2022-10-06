@@ -1,7 +1,7 @@
 # Foodgram
 
 ## Workflow
-![example workflow](https://github.com/solomen88/foodgram-project-react/actions/workflows/main.yml/badge.svg)
+![example workflow](https://github.com/solomen88/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
 ## Описание 
 
