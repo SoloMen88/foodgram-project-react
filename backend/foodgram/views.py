@@ -137,13 +137,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response = HttpResponse(content_type='application/pdf')
         content_disposition = f'attachment; filename="{file_name}.pdf"'
         response['Content-Disposition'] = content_disposition
-        pdfmetrics.registerFont(TTFont('Vera', 'Vera.ttf', 'UTF-8'))
+        pdfmetrics.registerFont(TTFont('Calibri', 'Calibri.ttf', 'UTF-8'))
         pdf = canvas.Canvas(response)
-        pdf.setFont('Vera', 24)
+        pdf.setFont('Calibri', 24)
         pdf.setFillColor(colors.black)
         pdf.drawCentredString(300, 770, 'Список покупок')
         pdf.setFillColor(colors.black)
-        pdf.setFont('Vera', 16)
+        pdf.setFont('Calibri', 16)
         height = 700
         for name, data in shopping_list.items():
             pdf.drawString(
@@ -154,7 +154,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             height -= 25
             if height == 50:
                 pdf.showPage()
-                pdf.setFont('Vera', 16)
+                pdf.setFont('Calibri', 16)
                 height = 700
         pdf.showPage()
         pdf.save()
