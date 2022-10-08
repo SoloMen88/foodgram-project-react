@@ -178,8 +178,8 @@ class Favorite(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f'Рецепт {self.recipe.name} находится в \
-            избранном у {self.user.username}'
+        return (f'Рецепт {self.recipe.name} находится в '
+                f'избранном у {self.user.username}')
 
 
 class ShoppingCart(models.Model):
@@ -197,7 +197,7 @@ class ShoppingCart(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['recipe', 'user'],
+                fields=('recipe', 'user'),
                 name='recipe_unique'
             )
         ]
