@@ -144,7 +144,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 }
             else:
                 shopping_list[name]['amount'] += amount
-            return self.generate_pdf(shopping_list)
+        return self.generate_pdf(shopping_list)
 
     def generate_pdf(self, shopping_list):
         """Создать pdf файл."""

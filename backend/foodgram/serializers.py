@@ -193,7 +193,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
 class RecipeForFollowSerializer(serializers.ModelSerializer):
     """Вспомогательный сериализатор для получения рецепта в подписках."""
-    
+
     image = Base64ImageField()
 
     class Meta:
@@ -214,7 +214,7 @@ class RecipeForFollowSerializer(serializers.ModelSerializer):
 
 class FollowSerializer(serializers.ModelSerializer):
     """Сериализатор для подписок."""
-    
+
     email = serializers.ReadOnlyField(source='author.email')
     id = serializers.ReadOnlyField(source='author.id')
     username = serializers.ReadOnlyField(source='author.username')
@@ -271,7 +271,7 @@ class FollowSerializer(serializers.ModelSerializer):
 
 class FavoriteSerializer(serializers.ModelSerializer):
     """Сериализатор для избранного."""
-    
+
     id = serializers.PrimaryKeyRelatedField(
         source='recipe.id', read_only=True
     )
@@ -288,7 +288,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
     """Сериализатор для списка покупок."""
-    
+
     id = serializers.PrimaryKeyRelatedField(
         source='recipe.id', read_only=True
     )
