@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
         validators=[username_validator],
     )
     first_name = models.CharField(
-        'Имя', max_lengthmax_length=150,
+        'Имя', max_length=150,
     )
     last_name = models.CharField(
         'Фамилия', max_length=150,
