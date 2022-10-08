@@ -1,6 +1,6 @@
 from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 User = get_user_model()
@@ -9,17 +9,17 @@ User = get_user_model()
 class Tag(models.Model):
 
     name = models.CharField(
+        'Описание',
         max_length=200,
         unique=True,
-        verbose_name='Описание'
     )
 
     color = ColorField(
-        unique=True, verbose_name='Цвет'
+        'Цвет', unique=True
     )
 
     slug = models.SlugField(
-        unique=True, max_length=254, verbose_name='Слаг'
+        'Слаг', unique=True, max_length=254
     )
 
     class Meta:
@@ -33,15 +33,15 @@ class Tag(models.Model):
 class Ingredient(models.Model):
 
     name = models.CharField(
-        max_length=200, verbose_name='Название ингредиента'
+        'Название ингредиента', max_length=200
     )
 
     measurement_unit = models.CharField(
-        max_length=20, verbose_name='Единица измерения'
+        'Единица измерения', max_length=20
     )
 
     class Meta:
-        ordering = ['name']
+        ordering = ('name')
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
@@ -59,16 +59,16 @@ class Recipe(models.Model):
     )
 
     name = models.CharField(
+        'Описание',
         max_length=200,
-        verbose_name='Описание'
     )
 
     image = models.ImageField(
+        'Изображение',
         upload_to='foodgram/media/',
-        verbose_name='Изображение'
     )
 
-    text = models.TextField(verbose_name='Описание')
+    text = models.TextField('Описание', max_length=500)
 
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -82,14 +82,16 @@ class Recipe(models.Model):
         verbose_name='Теги'
     )
 
-    cooking_time = models.PositiveIntegerField(
-        validators=[MinValueValidator(1, 'Количество не может быть меньше 1')],
+    cooking_time = models.PositiveSmallIntegerField(
+        'Время приготовления',
+        validators=[
+            MinValueValidator(1, 'Количество не может быть меньше 1'),
+            MaxValueValidator(500, 'Количество не может быть ,ольше 500')],
         default=1,
-        verbose_name='Время приготовления'
     )
 
     pub_date = models.DateTimeField(
-        verbose_name='Дата публикации', auto_now_add=True
+        'Дата публикации', auto_now_add=True
     )
 
     class Meta:
@@ -116,7 +118,7 @@ class Follow(models.Model):
         verbose_name_plural = 'Подписки'
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'author'],
+                fields=('user', 'author'),
                 name='unique_followings'
             )
         ]
@@ -136,9 +138,9 @@ class IngredientInRecipe(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Рецепт'
     )
-    amount = models.SmallIntegerField(
+    amount = models.PositiveSmallIntegerField(
+        'Количество ингредиента',
         default=1,
-        verbose_name='Количество ингредиента'
     )
 
     class Meta:
@@ -146,7 +148,7 @@ class IngredientInRecipe(models.Model):
         verbose_name_plural = verbose_name
         constraints = [
             models.UniqueConstraint(
-                fields=['ingredient', 'recipe'],
+                fields=('ingredient', 'recipe'),
                 name='unique_ingredients'
             )
         ]
@@ -168,7 +170,7 @@ class Favorite(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'recipe'],
+                fields=('user', 'recipe'),
                 name='unique_favorite'
             )
         ]
@@ -176,7 +178,8 @@ class Favorite(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f'Рецепт {self.recipe} находится в  избранном у {self.user}'
+        return f'Рецепт {self.recipe.name} находится в \
+            избранном у {self.user.username}'
 
 
 class ShoppingCart(models.Model):

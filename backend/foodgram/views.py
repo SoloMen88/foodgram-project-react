@@ -21,6 +21,8 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
 
 
 class IngredientViewSet(RetrieveListViewSet):
+    """Вьюсет для вывода ингридиентов."""
+
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (permissions.AllowAny, )
@@ -30,6 +32,8 @@ class IngredientViewSet(RetrieveListViewSet):
 
 
 class TagViewSet(RetrieveListViewSet):
+    """Вьюсет для вывода тэгов."""
+
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (permissions.AllowAny, )
@@ -37,6 +41,8 @@ class TagViewSet(RetrieveListViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
+    """Вьюсет для вывода рецептов."""
+
     queryset = Recipe.objects.all()
     filter_backends = [DjangoFilterBackend]
     permission_classes = (AuthorOrReadOnly, )
@@ -44,11 +50,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPageNumberPaginator
 
     def get_serializer_class(self):
+        """Выбрать сериализатор."""
         if self.request.method == 'GET':
             return RecipeListSerializer
         return RecipeCreateSerializer
 
     def perform_create(self, serializer):
+        """Создать рецепт от имени текущего пользователя."""
         serializer.save(author=self.request.user)
 
     @action(
@@ -57,6 +65,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(permissions.IsAuthenticated, )
     )
     def favorite(self, request, pk=None):
+        """Добавить/убрать в избранное."""
         user = request.user
         recipe = get_object_or_404(Recipe, pk=pk)
         if request.method == 'POST':
@@ -83,6 +92,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(permissions.IsAuthenticated, )
     )
     def shopping_cart(self, request, pk=None):
+        """Создать/удалить список покупок."""
         user = request.user
         recipe = get_object_or_404(Recipe, pk=pk)
         if request.method == 'POST':
@@ -114,6 +124,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(permissions.IsAuthenticated, )
     )
     def download_shopping_cart(self, request):
+        """Скачать список покупок."""
         user = request.user
         shopping_list = {}
         ingredients = IngredientInRecipe.objects.filter(
@@ -133,6 +144,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 }
             else:
                 shopping_list[name]['amount'] += amount
+            return self.generate_pdf(shopping_list)
+
+    def generate_pdf(self, shopping_list):
+        """Создать pdf файл."""
         file_name = 'ShoppingList'
         response = HttpResponse(content_type='application/pdf')
         content_disposition = f'attachment; filename="{file_name}.pdf"'
