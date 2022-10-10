@@ -29,7 +29,7 @@ class CustomUserViewSet(UserViewSet):
         return self.get_paginated_response(serializer.data)
 
     @action(
-        methods=['get', 'delete'],
+        methods=['post', 'delete'],
         detail=True,
         permission_classes=(permissions.IsAuthenticated, )
     )
@@ -38,7 +38,7 @@ class CustomUserViewSet(UserViewSet):
         user = request.user
         check_subscribe = Follow.objects.filter(
             user=user, author=author).exists()
-        if request.method == 'GET':
+        if request.method == 'POST':
             if check_subscribe or user == author:
                 return Response({
                     'errors': ('Вы уже подписаны на этого автора рецептов '

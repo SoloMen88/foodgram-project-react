@@ -86,7 +86,7 @@ class Recipe(models.Model):
         'Время приготовления',
         validators=[
             MinValueValidator(1, 'Количество не может быть меньше 1'),
-            MaxValueValidator(500, 'Количество не может быть ,ольше 500')],
+            MaxValueValidator(500, 'Количество не может быть больше 500')],
         default=1,
     )
 
@@ -140,6 +140,9 @@ class IngredientInRecipe(models.Model):
     )
     amount = models.PositiveSmallIntegerField(
         'Количество ингредиента',
+        validators=[
+            MinValueValidator(1, 'Количество не может быть меньше 1'),
+            MaxValueValidator(5000, 'Количество не может быть больше 5000')],
         default=1,
     )
 

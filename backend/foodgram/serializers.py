@@ -101,7 +101,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'В вашем рецепте должен быть хотя бы один ингредиент')
         for ingredient in data:
-            if int(ingredient.get('amount')) <= 0:
+            if float(ingredient.get('amount')) <= 0:
                 raise serializers.ValidationError(
                     'Количество ингредиента должно быть больше нуля!')
             ingredients_id_list.append(ingredient.get('id'))
@@ -119,7 +119,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'В вашем рецепте должен быть хотя бы один тэг')
         for tag in data:
-            tag_id_list.append(tag.get('id'))
+            tag_id_list.append(tag.id)
         unique_tag = set(tag_id_list)
         if len(tag_id_list) > len(unique_tag):
             raise serializers.ValidationError(

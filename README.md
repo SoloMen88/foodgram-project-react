@@ -49,7 +49,7 @@ docker-compose run backend python manage.py createsuperuser
 sudo docker-compose run backend python manage.py loaddata dump.json
 ```
 ## Документация
-Документация будет доступна после запуска проекта по адресу `api/docs/`.
+http://solomen88.ddns.net/api/docs/.
 
 ## Адрес проекта
 http://solomen88.ddns.net/recipes/

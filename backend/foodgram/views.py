@@ -160,12 +160,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         pdf.setFillColor(colors.black)
         pdf.setFont('Neocyr', 16)
         height = 700
+        num = 1
         for name, data in shopping_list.items():
             pdf.drawString(
                 60,
                 height,
-                f"{name} - {data['amount']} {data['measurement_unit']}"
+                f"{num}. {name} - {data['amount']} {data['measurement_unit']}"
             )
+            num += 1
             height -= 25
             if height == 50:
                 pdf.showPage()
