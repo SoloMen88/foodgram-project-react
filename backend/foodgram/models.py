@@ -68,7 +68,7 @@ class Recipe(models.Model):
         upload_to='foodgram/media/',
     )
 
-    text = models.TextField('Описание', max_length=500)
+    text = models.TextField('Описание', max_length=2000)
 
     ingredients = models.ManyToManyField(
         Ingredient,
