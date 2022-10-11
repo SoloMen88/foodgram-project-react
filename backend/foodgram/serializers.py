@@ -132,6 +132,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         if data <= 0:
             raise serializers.ValidationError(
                 'Время приготовления блюда не может быть меньше 1 минуты')
+        elif data > 500:
+            raise serializers.ValidationError(
+                'Время приготовления блюда не может быть больше 500 минут')
         return data
 
     def add_recipe_ingredient(self, ingredients, recipe):
